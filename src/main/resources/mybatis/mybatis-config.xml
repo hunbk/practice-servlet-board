@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 설정에서 각 매퍼에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부 -->
+        <setting name="cacheEnabled" value="false"/>
+        <!-- 생성키에 대한 JDBC 지원을 허용. 지원하는 드라이버가 필요하다. true로 설정하면 생성키를 강제로 생성한다. -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!-- 디폴트 실행자(executor) 설정. SIMPLE 실행자는 특별히 하는 것이 없다. REUSE 실행자는 PreparedStatement를 재사용한다. BATCH 실행자는 구문을 재사용하고 수정을 배치처리한다. -->
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <!-- 스네이크 케이스(DB 컬럼명)를 카멜케이스(VO 필드명) 로 변환 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="com.bit.homework.domain.Member" alias="Member"/>
+        <typeAlias type="com.bit.homework.domain.Board" alias="Board"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/bit_homework?serverTimezone=UTC"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="com/bit/homework/repository/member/MemberMapper.xml"/>
+        <mapper resource="com/bit/homework/repository/board/BoardMapper.xml"/>
+    </mappers>
+</configuration>

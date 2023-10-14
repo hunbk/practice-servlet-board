@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bit.homework.repository.member.MemberMapper">
+    <insert id="save">
+        INSERT INTO member (email, password, nickname)
+        VALUES (#{email}, #{password}, #{nickname})
+    </insert>
+
+    <insert id="addBookmark">
+        INSERT INTO member_bookmark (member_id, board_id)
+        VALUES (#{memberId}, #{boardId})
+    </insert>
+
+    <insert id="addBoardLikes">
+        INSERT INTO member_board_likes (member_id, board_id)
+        VALUES (#{memberId}, #{boardId})
+    </insert>
+
+    <insert id="addBoardDislikes">
+        INSERT INTO member_board_dislikes (member_id, board_id)
+        VALUES (#{memberId}, #{boardId})
+    </insert>
+
+    <delete id="removeBookmark">
+        DELETE
+        FROM member_bookmark
+        WHERE member_id = #{memberId}
+          AND board_id = #{boardId}
+    </delete>
+
+    <delete id="removeBoardLikes">
+        DELETE
+        FROM member_board_likes
+        WHERE member_id = #{memberId}
+          AND board_id = #{boardId}
+    </delete>
+
+    <delete id="removeBoardDislikes">
+        DELETE
+        FROM member_board_dislikes
+        WHERE member_id = #{memberId}
+          AND board_id = #{boardId}
+    </delete>
+
+    <select id="findById" resultType="Member" parameterType="java.lang.Integer">
+        SELECT *
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
+    <select id="findByEmail" resultType="Member" parameterType="java.lang.String">
+        SELECT *
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="existsBookmark" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false' END
+        FROM member_bookmark
+        WHERE member_id = #{memberId}
+          AND board_id = #{boardId}
+    </select>
+
+    <select id="existsBoardLikes" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false' END
+        FROM member_board_likes
+        WHERE member_id = #{memberId}
+          AND board_id = #{boardId}
+    </select>
+
+    <select id="existsBoardDislikes" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false' END
+        FROM member_board_dislikes
+        WHERE member_id = #{memberId}
+          AND board_id = #{boardId}
+    </select>
+
+</mapper>

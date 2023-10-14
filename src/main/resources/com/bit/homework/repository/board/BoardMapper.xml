@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bit.homework.repository.board.BoardMapper">
+    <select id="save" resultType="Board">
+        INSERT INTO board (member_id, writer, category, password, subject, content, filepath)
+        VALUES (#{memberId}, #{writer}, #{category}, #{password}, #{subject}, #{content}, #{filepath})
+    </select>
+
+    <update id="update">
+        UPDATE board
+        SET category = #{board.category},
+            subject  = #{board.subject},
+            content  = #{board.content}
+        WHERE board_id = #{boardId}
+    </update>
+
+    <update id="increaseViews" parameterType="Integer">
+        UPDATE board
+        SET views = views + 1
+        WHERE board_id = #{boardId}
+    </update>
+
+    <update id="addLikes">
+        UPDATE board
+        SET likes = likes + 1
+        WHERE board_id = #{boardId}
+    </update>
+
+    <update id="cancelLikes">
+        UPDATE board
+        SET likes = likes - 1
+        WHERE board_id = #{boardId}
+    </update>
+
+    <update id="addDislikes">
+        UPDATE board
+        SET dislikes = dislikes + 1
+        WHERE board_id = #{boardId}
+    </update>
+
+    <update id="cancelDislikes">
+        UPDATE board
+        SET dislikes = dislikes - 1
+        WHERE board_id = #{boardId}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM board
+        WHERE board_id = #{boardId}
+    </delete>
+
+    <select id="findById" resultType="Board" parameterType="java.lang.Integer">
+        SELECT board_id,
+               member_id,
+               writer,
+               category,
+               password,
+               subject,
+               content,
+               created_date,
+               views,
+               filepath,
+               likes,
+               dislikes
+        FROM board
+        WHERE board_id = #{boardId}
+    </select>
+
+    <select id="findAll" resultType="Board">
+        SELECT board_id,
+        member_id,
+        writer,
+        category,
+        password,
+        subject,
+        content,
+        created_date,
+        views,
+        filepath,
+        likes,
+        dislikes
+        FROM board
+        <where>
+            <if test="query != null and query != ''">
+                and ${type} like concat('%', #{query}, '%')
+            </if>
+        </where>
+        ORDER BY board_id DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM board
+        <where>
+            <if test="query != null and query != ''">
+                and ${type} like concat('%', #{query}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findAllByMemberBookmark" resultType="Board">
+        SELECT b.*
+        FROM board b
+                 JOIN member_bookmark bm ON b.board_id = bm.board_id
+        WHERE bm.member_id = #{memberId}
+    </select>
+
+    <select id="getLikesCount" resultType="java.lang.Integer">
+        SELECT likes
+        FROM board
+        WHERE board_id = #{boardId}
+    </select>
+
+    <select id="getDislikesCount" resultType="java.lang.Integer">
+        SELECT dislikes
+        FROM board
+        WHERE board_id = #{boardId}
+    </select>
+
+</mapper>
